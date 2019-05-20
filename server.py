@@ -16,28 +16,29 @@ server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 
   
 # checks whether sufficient arguments have been provided 
-if len(sys.argv) != 3: 
+if len(sys.argv) != 2: 
     print("Correct usage: script, IP address, port number")
     exit() 
   
 # takes the first argument from command prompt as IP address 
-IP_address = str(sys.argv[1]) 
+HOST = socket.gethostname()
+
   
 # takes second argument from command prompt as port number 
-Port = int(sys.argv[2]) 
+PORT = int(sys.argv[1]) 
   
 """ 
 binds the server to an entered IP address and at the 
 specified port number. 
 The client must be aware of these parameters 
 """
-server.bind((IP_address, Port)) 
+server.bind((HOST, PORT)) 
   
 """ 
 listens for 100 active connections. This number can be 
 increased as per convenience. 
 """
-print("Listening on", IP_address, Port)
+print("Listening on", HOST, PORT)
 server.listen(100) 
   
 list_of_clients = [] 
