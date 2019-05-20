@@ -37,6 +37,7 @@ server.bind((IP_address, Port))
 listens for 100 active connections. This number can be 
 increased as per convenience. 
 """
+print("Listening on", IP_address, Port)
 server.listen(100) 
   
 list_of_clients = [] 
