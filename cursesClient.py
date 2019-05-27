@@ -16,13 +16,14 @@ Port = int(sys.argv[2])
 server.connect((IP_address, Port)) 
 
 
+
 '''
 Curses menu rendering
 '''
 def draw_menu(stdscr):
     k = 0
-    cursor_x = 0
-    cursor_y = 0
+    # cursor_x = 0
+    # cursor_y = 0
 
     # Clear and refresh the screen for a blank canvas
     stdscr.clear()
@@ -41,6 +42,7 @@ def draw_menu(stdscr):
         stdscr.clear()
         height, width = stdscr.getmaxyx()
 
+        '''
         # cursor movement
         if k == curses.KEY_DOWN:
             cursor_y = cursor_y + 1
@@ -56,26 +58,30 @@ def draw_menu(stdscr):
 
         cursor_y = max(0, cursor_y)
         cursor_y = min(height-1, cursor_y)
+        '''
 
         # Declaration of strings
         title = "Welcome to Cash Grab!"[:width-1]
         subtitle = "CSC 4750 Final Project for Alex Lopez."[:width-1]
-        keystr = "Last key pressed: {}".format(k)[:width-1]
-        statusbarstr = "Press 'esc' to exit | STATUS BAR | Pos: {}, {}".format(cursor_x, cursor_y)
+        keystr = "{}".format(k)[:width-1]
+        statusbarstr = "Press 'esc' to exit | STATUS BAR | Key: {}".format(keystr)
+        
+        '''
         if k == 0:
             keystr = "No key press detected..."[:width-1]
+        '''
 
         # Centering calculations
-        start_x_title = int((width // 2) - (len(title) // 2) - len(title) % 2)
-        start_x_subtitle = int((width // 2) - (len(subtitle) // 2) - len(subtitle) % 2)
-        start_x_keystr = int((width // 2) - (len(keystr) // 2) - len(keystr) % 2)
-        start_y = int((height // 2) - 2)
+        center_x_title = int((width // 2) - (len(title) // 2) - len(title) % 2)
+        # center_x_subtitle = int((width // 2) - (len(subtitle) // 2) - len(subtitle) % 2)
+        # center_x_keystr = int((width // 2) - (len(keystr) // 2) - len(keystr) % 2)
+        center_y = int((height // 2) - 2)
+
 
         # Rendering some text
         # whstr = "Width: {}, Height: {}".format(width, height)
         stdscr.addstr(0, 0, (subtitle), curses.color_pair(1))
         # stdscr.addstr(0, 0, subtitle, curses.color_pair(1))
-
 
         # Render status bar
         stdscr.attron(curses.color_pair(3))
@@ -88,36 +94,55 @@ def draw_menu(stdscr):
         stdscr.attron(curses.A_BOLD)
 
         # Rendering title
-        stdscr.addstr(start_y, start_x_title, title)
+        stdscr.addstr(center_y-5, center_x_title, title)
+        # stdscr.addstr(center_y - 2, center_x_title, title)
 
         # Turning off attributes for title
         stdscr.attroff(curses.color_pair(2))
         stdscr.attroff(curses.A_BOLD)
 
-        # Print rest of text
-        stdscr.addstr(start_y + 1, start_x_subtitle, subtitle)
-        stdscr.addstr(start_y + 3, (width // 2) - 2, '-' * 4)
-        stdscr.addstr(start_y + 5, start_x_keystr, keystr)
-        stdscr.move(cursor_y, cursor_x)
+        # Render moneybag
+        stdscr.addstr(center_y-4, (width // 2) - 2, '-' * 5)
+        stdscr.addstr(center_y-3, (width // 2) - 2, "\\   /")
+        stdscr.addstr(center_y-2, (width // 2) - 1, "***")
+        stdscr.addstr(center_y-1, (width // 2) - 3, "/     \\")
+        stdscr.addstr(center_y, (width // 2) - 5, "/         \\")
+        stdscr.addstr(center_y+1, (width // 2) - 7, "/      $      \\")
+        stdscr.addstr(center_y+2, (width // 2) - 8, "|      $$$      |")
+        stdscr.addstr(center_y+3, (width // 2) - 7, "\\      $      /")
+        stdscr.addstr(center_y+4, (width // 2) - 5, "\\         /")
+        stdscr.addstr(center_y+5, (width // 2) - 4, '-' * 8)
 
-
+        
         # maintains a list of possible input streams 
         sockets_list = [sys.stdin, server] 
         read_sockets,write_socket, error_socket = select.select(sockets_list,[],[]) 
+
+        # move all strings up (y+1)
+        '''
+        for (x = 0; x < height; x++)                
+            message = (stdscr.getstr(, )).decode()
+        '''
         
         for socks in read_sockets: 
             if socks == server: 
                 message = socks.recv(1024).decode('utf-8') 
-                print(message) 
+                stdscr.addstr(height-3, 0, message);
             else: 
-                message = sys.stdin.readline() 
-                # server.send(message) 
+                stdscr.addstr(height-2, 0, "> ")
+
+                message = (stdscr.getstr(height-2, 2)).decode()
+                
                 server.send(bytes(message + '\n', 'utf8'))
 
-                sys.stdout.write("<You>") 
-                sys.stdout.write(message) 
-                sys.stdout.flush() 
+                stdscr.addstr(height-3, 0, ("<You> " + message))
+ 
+                # sys.stdout.write(message) 
+                # sys.stdout.flush() 
+        
 
+
+        # stdscr.move(cursor_y, cursor_x)
 
         # Refresh the screen
         stdscr.refresh()
@@ -128,7 +153,7 @@ def draw_menu(stdscr):
         
     
     # while loop ended, close server connection
-    server.close()
+    # server.close()
 
 
 def main():
