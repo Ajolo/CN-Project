@@ -12,8 +12,6 @@ a continuous flow."""
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
 
-# print("Heya")
-
   
 # checks whether sufficient arguments have been provided 
 if len(sys.argv) != 2: 
@@ -46,7 +44,7 @@ list_of_clients = []
 def clientthread(conn, addr): 
   
     # sends a message to the client whose user object is conn 
-    conn.send(bytes('Welcome to this chatroom!\n', 'utf8'))
+    conn.send(bytes('Welcome to ' + HOST + '\'s chatroom!\n', 'utf8'))
   
     while True: 
             try: 
