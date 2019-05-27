@@ -2,6 +2,10 @@
 import socket 
 import select 
 import sys 
+import curses
+
+# init curses 
+stdscr = curses.initscr()
 
   
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
@@ -33,7 +37,6 @@ while True:
             print(message) 
         else: 
             message = sys.stdin.readline() 
-            # server.send(message) 
             server.send(bytes(message + '\n', 'utf8'))
 
             sys.stdout.write("<You>") 
