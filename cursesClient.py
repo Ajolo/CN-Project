@@ -42,34 +42,11 @@ def draw_menu(stdscr):
         stdscr.clear()
         height, width = stdscr.getmaxyx()
 
-        '''
-        # cursor movement
-        if k == curses.KEY_DOWN:
-            cursor_y = cursor_y + 1
-        elif k == curses.KEY_UP:
-            cursor_y = cursor_y - 1
-        elif k == curses.KEY_RIGHT:
-            cursor_x = cursor_x + 1
-        elif k == curses.KEY_LEFT:
-            cursor_x = cursor_x - 1
-
-        cursor_x = max(0, cursor_x)
-        cursor_x = min(width-1, cursor_x)
-
-        cursor_y = max(0, cursor_y)
-        cursor_y = min(height-1, cursor_y)
-        '''
-
         # Declaration of strings
         title = "Welcome to Cash Grab!"[:width-1]
         subtitle = "CSC 4750 Final Project for Alex Lopez."[:width-1]
         keystr = "{}".format(k)[:width-1]
         statusbarstr = "Press 'esc' to exit | STATUS BAR | Key: {}".format(keystr)
-        
-        '''
-        if k == 0:
-            keystr = "No key press detected..."[:width-1]
-        '''
 
         # Centering calculations
         center_x_title = int((width // 2) - (len(title) // 2) - len(title) % 2)
@@ -140,10 +117,6 @@ def draw_menu(stdscr):
                 # sys.stdout.write(message) 
                 # sys.stdout.flush() 
         
-
-
-        # stdscr.move(cursor_y, cursor_x)
-
         # Refresh the screen
         stdscr.refresh()
 
