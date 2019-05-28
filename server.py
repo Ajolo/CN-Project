@@ -44,7 +44,7 @@ list_of_clients = []
 def clientthread(conn, addr): 
   
     # sends a message to the client whose user object is conn 
-    conn.send(bytes('Welcome to ' + HOST + '\'s chatroom!\n', 'utf8'))
+    conn.send(bytes('Welcome to ' + HOST + '\'s chatroom!', 'utf8'))
   
     while True: 
             try: 
@@ -76,7 +76,7 @@ def broadcast(message, connection):
         if clients!=connection: 
             try: 
                 # clients.send(b + message + '\n') 
-                clients.send(bytes(message + '\n', 'utf8'))
+                clients.send(bytes(message, 'utf8'))
             except: 
                 clients.close() 
   
