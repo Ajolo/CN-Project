@@ -12,7 +12,6 @@ PORT = int(sys.argv[2])
 server.connect((IP_ADDR, PORT)) 
 
 
-
 '''
 Curses menu rendering
 '''
@@ -128,8 +127,8 @@ def draw_menu(stdscr):
             currPos = 0
             while currPos < len(text_to_render):
                 try:
-                    textWindow.addstr((textHeight-2) - currPos, 0, text_to_render[currPos])
                     textWindow.clrtoeol() # do this to clear any previous input 
+                    textWindow.addstr((textHeight-2) - currPos, 0, text_to_render[currPos])
                 except:
                     break
                 currPos += 1
@@ -148,7 +147,9 @@ def draw_menu(stdscr):
     # handle ctrl+c
     except KeyboardInterrupt:
         pass
-    
+
+
+    # close server connection and clear curses formatting
     stdscr.clear()
     server.close()
 
