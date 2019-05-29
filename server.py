@@ -112,7 +112,9 @@ while 1:
     list_of_clients.append(conn) 
   
     # prints the address of the user that just connected 
-    print(addr[0] + " connected")
+    # print(addr[0] + " connected")
+    for (address in list_of_clients):
+        broadcast(address[0] + " connected")
   
     # creates and individual thread for every user  
     # that connects 
