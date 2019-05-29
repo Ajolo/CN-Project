@@ -1,9 +1,9 @@
 # Python program to implement server side of chat room. 
 import socket, select, sys, _thread
 
-commands = {'help': 'Commands are /help, /take, /ping, /',
+commands = {'help': 'Commands are /help, /take, /ping',
             'Age': 7,
-            'Class': 'First'}
+}
 
   
 """The first argument AF_INET is the address domain of the 
@@ -66,7 +66,6 @@ def clientthread(conn, addr):
                     with a '/' indicating a command"""
                     if (message[:1] == '/'):
                         inputCommand(conn, message[1:])
-                        # conn.send(bytes('Not broadcasting', 'utf8'))
                         
                     else:
                         # Calls broadcast function to send message to all 
@@ -103,10 +102,13 @@ def remove(connection):
         list_of_clients.remove(connection) 
 
 def inputCommand(conn, message):
-    conn.send(bytes(("YOU SAID " + message), 'utf8'))
+    # conn.send(bytes(("YOU SAID " + message), 'utf8'))
+    if message in commands:
+        conn.send(bytes(commands[message]), 'utf8') 
+    else:
+        conn.send(bytes("Command not recognized"), 'utf8')
   
 while 1: 
-  
     """Accepts a connection request and stores two parameters,  
     conn which is a socket object for that user, and addr  
     which contains the IP address of the client that just  
