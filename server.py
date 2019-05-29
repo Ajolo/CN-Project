@@ -104,10 +104,9 @@ def remove(connection):
 def inputCommand(conn, message):
     # conn.send(bytes(("YOU SAID " + message), 'utf8'))
     if message in commands:
-        print("MADE IT TO INPUTCOMMAND FUNC IF")
+        print("SHOULD SEND " + commands[message])
         conn.send(bytes(commands[message]), 'utf8') 
     else:
-        print("MADE IT TO INPUTCOMMAND FUNC ELSE")
         conn.send(bytes("Command not recognized"), 'utf8')
   
 while 1: 
