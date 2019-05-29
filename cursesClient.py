@@ -109,15 +109,12 @@ def draw_menu(stdscr):
             for socks in read_sockets: 
                 if socks == server: 
                     message = socks.recv(1024).decode('utf-8') 
-                    text_to_render.append(message) # or to insert at start: .insert(0, message)
+                    text_to_render.insert(0, message)
                 else: 
                     message = (inputWindow.getstr(0, 2)).decode()
                     server.send(bytes(message + '\n', 'utf8'))
                     prependMessage = ("<You> " + message)
-                    text_to_render.append(prependMessage)
-
-            # reverse to render from bottom up
-            text_to_render.reverse()
+                    text_to_render.insert(0, prependMessage)
 
             # if length of text_to_render is larger than render area, then 
             while len(text_to_render) > textHeight:
@@ -132,9 +129,6 @@ def draw_menu(stdscr):
                 except:
                     break
                 currPos += 1
-            
-            # undo reverse for appending
-            text_to_render.reverse()
             
             # Refresh the screen
             textWindow.refresh()
