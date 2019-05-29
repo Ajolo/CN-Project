@@ -52,6 +52,9 @@ def clientthread(conn, addr):
             try: 
                 message = conn.recv(1024).decode('utf-8')
                 if message: 
+                    # remove trailing whitespace and newlines
+                    message.rstrip()
+
                     """prints the message and address of the 
                     user who just sent the message on the server 
                     terminal"""
