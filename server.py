@@ -113,9 +113,11 @@ while 1:
   
     # prints the address of the user that just connected 
     # print(addr[0] + " connected")
-    for (address in list_of_clients):
-        broadcast(address[0] + " connected")
-  
+    connMessage = addr[0] + " connected"
+    
+    for address in list_of_clients:
+        broadcast(connMessage, address)
+    
     # creates and individual thread for every user  
     # that connects 
     _thread.start_new_thread(clientthread, (conn,addr))  
