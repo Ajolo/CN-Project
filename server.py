@@ -1,8 +1,10 @@
 # Python program to implement server side of chat room. 
-import socket 
-import select 
-import sys 
-import _thread
+import socket, select, sys, _thread
+
+commands = {'help': 'Commands are /help, /take, /ping, /',
+            'Age': 7,
+            'Class': 'First'}
+
   
 """The first argument AF_INET is the address domain of the 
 socket. This is used when we have an Internet Domain with 
@@ -63,7 +65,8 @@ def clientthread(conn, addr):
                     """do not broadcast if user message prepended 
                     with a '/' indicating a command"""
                     if (message[:1] == '/'):
-                        conn.send(bytes('Not broadcasting', 'utf8'))
+                        inputCommand(conn, message[1:])
+                        # conn.send(bytes('Not broadcasting', 'utf8'))
                         
                     else:
                         # Calls broadcast function to send message to all 
@@ -98,6 +101,9 @@ def remove(connection):
     if connection in list_of_clients: 
         # print("Removing client: " + connection)
         list_of_clients.remove(connection) 
+
+def inputCommand(conn, message):
+    conn.send(bytes(("YOU SAID " + message), 'utf8'))
   
 while 1: 
   
