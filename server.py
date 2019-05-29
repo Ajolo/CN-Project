@@ -44,8 +44,8 @@ list_of_clients = []
 def clientthread(conn, addr): 
   
     # sends a message to the client whose user object is conn 
-    conn.send(bytes('Welcome to ' + HOST + '\'s chatroom!\n', 'utf8'))
-    conn.send(bytes('Welcome to ' + HOST + '\'s chatroom!\n', 'utf8'))
+    conn.send(bytes('Welcome to ' + HOST + '\'s chatroom!', 'utf8'))
+    # conn.send(bytes('Welcome to ' + HOST + '\'s chatroom!\n', 'utf8'))
 
   
     while True: 
@@ -60,10 +60,11 @@ def clientthread(conn, addr):
                     """do not broadcast if user message prepended 
                     with a '/' indicating a command"""
                     if (message[:1] == '/'):
-                        conn.send(bytes('Not broadcasting\n', 'utf8'))
+                        conn.send(bytes('Not broadcasting', 'utf8'))
+                        
                     else:
                         # Calls broadcast function to send message to all 
-                        message_to_send = "<" + addr[0] + "> " + message + "\n"
+                        message_to_send = "<" + addr[0] + "> " + message
                         broadcast(message_to_send, conn) 
   
                 else: 
