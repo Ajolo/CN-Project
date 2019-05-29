@@ -23,13 +23,13 @@ def draw_menu(stdscr):
     height, width = stdscr.getmaxyx()
 
     # subwindow for text
-    textWindow = stdscr.subwin(height-2, 40, 1, 0)
+    textWindow = stdscr.subwin(height-2, 60, 1, 0)
     textHeight, textWidth = textWindow.getmaxyx()
     textWindow.clear()
     textWindow.refresh()
 
     # subwindow for text input
-    inputWindow = stdscr.subwin(1, 40, height-2, 0)
+    inputWindow = stdscr.subwin(1, 60, height-2, 0)
     inputHeight, inputWidth = inputWindow.getmaxyx()
     inputWindow.addstr(0, 0, "> ")
     inputWindow.clear()
@@ -112,7 +112,7 @@ def draw_menu(stdscr):
                     text_to_render.insert(0, message)
                 else: 
                     message = (inputWindow.getstr(0, 2)).decode()
-                    server.send(bytes(message + '\n', 'utf8'))
+                    server.send(bytes(message, 'utf8'))
                     prependMessage = ("<You> " + message)
                     text_to_render.insert(0, prependMessage)
 
@@ -133,7 +133,6 @@ def draw_menu(stdscr):
             # Refresh the screen
             textWindow.refresh()
             stdscr.refresh()
-
             inputWindow.erase()
             inputWindow.addstr(0, 0, "> ")
             inputWindow.refresh()
