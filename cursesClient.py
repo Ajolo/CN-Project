@@ -121,14 +121,12 @@ def draw_menu(stdscr):
                 text_to_render.pop()
     
             # render all previously saved text
-            currPos = 0
-            while currPos < len(text_to_render):
+            for i in range(0, len(text_to_render)):
                 try:
                     textWindow.clrtoeol() # do this to clear any previous input 
-                    textWindow.addstr((textHeight-2) - currPos, 0, text_to_render[currPos])
+                    textWindow.addstr((textHeight-2) - i, 0, text_to_render[i])
                 except:
                     break
-                currPos += 1
             
             # Refresh the screen
             textWindow.refresh()

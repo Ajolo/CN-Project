@@ -51,31 +51,31 @@ def clientthread(conn, addr):
 
   
     while True: 
-            try: 
-                message = conn.recv(1024).decode('utf-8')
-                if message: 
-                    # remove trailing whitespace and newlines
-                    message.rstrip()
+        try: 
+            message = conn.recv(1024).decode('utf-8')
+            if message: 
+                # remove trailing whitespace and newlines
+                message.rstrip()
 
-                    """prints the message and address of the 
-                    user who just sent the message on the server 
-                    terminal"""
-                    print("<" + addr[0] + "> " + message)
+                """prints the message and address of the 
+                user who just sent the message on the server 
+                terminal"""
+                print("<" + addr[0] + "> " + message)
 
-                    """do not broadcast if user message prepended 
-                    with a '/' indicating a command"""
-                    if (message[:1] == '/'):
-                        inputCommand(conn, message[1:])
-                        
-                    else:
-                        # Calls broadcast function to send message to all 
-                        message_to_send = "<" + addr[0] + "> " + message
-                        broadcast(message_to_send, conn) 
-  
-                else: 
-                    """message may have no content if the connection 
-                    is broken, in this case we remove the connection"""
-                    remove(conn) 
+                """do not broadcast if user message prepended 
+                with a '/' indicating a command"""
+                if (message[:1] == '/'):
+                    inputCommand(conn, message[1:])
+                    
+                else:
+                    # Calls broadcast function to send message to all 
+                    message_to_send = "<" + addr[0] + "> " + message
+                    broadcast(message_to_send, conn) 
+
+        else: 
+            """message may have no content if the connection 
+            is broken, in this case we remove the connection"""
+            remove(conn) 
   
             except: 
                 continue
@@ -120,8 +120,8 @@ while 1:
     a message to all available people in the chatroom"""
     list_of_clients.append(conn) 
   
-    # prints the address of the user that just connected 
-    # print(addr[0] + " connected")
+    # prints and broadcasts the address of the user that just connected 
+    print(addr[0] + " connected")
     connMessage = addr[0] + " connected"
     
     for address in list_of_clients:
