@@ -2,15 +2,17 @@
 import socket, select, sys, _thread
 
 commands = {'help': 'Commands are /help, /take, /ping',
-            'Age': 7,
+            'Age': 7
 }
 
   
-"""The first argument AF_INET is the address domain of the 
+'''
+The first argument AF_INET is the address domain of the 
 socket. This is used when we have an Internet Domain with 
 any two hosts The second argument is the type of socket. 
 SOCK_STREAM means that data or characters are read in 
-a continuous flow."""
+a continuous flow.
+'''
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
 
@@ -27,17 +29,17 @@ HOST = socket.gethostname()
 # takes second argument from command prompt as port number 
 PORT = int(sys.argv[1]) 
   
-""" 
+'''
 binds the server to an entered IP address and at the 
 specified port number. 
 The client must be aware of these parameters 
-"""
+'''
 server.bind((HOST, PORT)) 
   
-""" 
+'''
 listens for 100 active connections. This number can be 
 increased as per convenience. 
-"""
+'''
 print("Listening on", HOST, PORT)
 server.listen(100) 
   
@@ -57,13 +59,17 @@ def clientthread(conn, addr):
                 # remove trailing whitespace and newlines
                 message.rstrip()
 
-                """prints the message and address of the 
+                '''
+                prints the message and address of the 
                 user who just sent the message on the server 
-                terminal"""
+                terminal
+                '''
                 print("<" + addr[0] + "> " + message)
 
-                """do not broadcast if user message prepended 
-                with a '/' indicating a command"""
+                '''
+                do not broadcast if user message prepended 
+                with a '/' indicating a command
+                '''
                 if (message[:1] == '/'):
                     inputCommand(conn, message[1:])
                     
@@ -73,16 +79,20 @@ def clientthread(conn, addr):
                     broadcast(message_to_send, conn) 
 
         else: 
-            """message may have no content if the connection 
-            is broken, in this case we remove the connection"""
+            '''
+            message may have no content if the connection 
+            is broken, in this case we remove the connection
+            '''
             remove(conn) 
   
             except: 
                 continue
   
-"""Using the below function, we broadcast the message to all 
+'''
+Using the below function, we broadcast the message to all 
 clients who's object is not the same as the one sending 
-the message """
+the message
+'''
 def broadcast(message, connection): 
     for client in list_of_clients: 
         if client!=connection: 
@@ -93,9 +103,11 @@ def broadcast(message, connection):
                 # if the link is broken, we remove the client 
                 remove(client) 
   
-"""The following function simply removes the object 
+'''
+The following function simply removes the object 
 from the list that was created at the beginning of  
-the program"""
+the program
+'''
 def remove(connection): 
     if connection in list_of_clients: 
         # print("Removing client: " + connection)
@@ -110,14 +122,18 @@ def inputCommand(conn, message):
         conn.send(bytes("Command not recognized"), 'utf8')
   
 while 1: 
-    """Accepts a connection request and stores two parameters,  
+    '''
+    Accepts a connection request and stores two parameters,  
     conn which is a socket object for that user, and addr  
     which contains the IP address of the client that just  
-    connected"""
+    connected
+    '''
     conn, addr = server.accept() 
   
-    """Maintains a list of clients for ease of broadcasting 
-    a message to all available people in the chatroom"""
+    '''
+    Maintains a list of clients for ease of broadcasting 
+    a message to all available people in the chatroom
+    '''
     list_of_clients.append(conn) 
   
     # prints and broadcasts the address of the user that just connected 
