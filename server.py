@@ -78,15 +78,15 @@ def clientthread(conn, addr):
                     message_to_send = "<" + addr[0] + "> " + message
                     broadcast(message_to_send, conn) 
 
-        else: 
-            '''
-            message may have no content if the connection 
-            is broken, in this case we remove the connection
-            '''
-            remove(conn) 
+            else: 
+                '''
+                message may have no content if the connection 
+                is broken, in this case we remove the connection
+                '''
+                remove(conn) 
   
-            except: 
-                continue
+        except: 
+            continue
   
 '''
 Using the below function, we broadcast the message to all 
