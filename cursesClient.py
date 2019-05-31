@@ -104,12 +104,15 @@ def draw_menu(stdscr):
  
             # maintains a list of possible input streams 
             sockets_list = [sys.stdin, server] 
-            read_sockets,write_socket, error_socket = select.select(sockets_list,[],[]) 
+            read_sockets, write_socket, error_socket = select.select(sockets_list,[],[]) 
   
             for socks in read_sockets: 
                 if socks == server: 
-                    message = socks.recv(1024).decode('utf-8') 
-                    text_to_render.insert(0, message)
+                    message = socks.recv(1024).decode('utf-8')
+                    # once message recv'd, need to separate out consecutive messages by newline
+                    message.splitlines()
+                    for line in message
+                        text_to_render.insert(0, line)
                 else: 
                     message = (inputWindow.getstr(0, 2)).decode()
                     server.send(bytes(message, 'utf8'))

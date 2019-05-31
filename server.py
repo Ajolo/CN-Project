@@ -7,11 +7,10 @@ commands = {'help': 'Commands are /help, /take, /ping',
 
   
 '''
-The first argument AF_INET is the address domain of the 
-socket. This is used when we have an Internet Domain with 
-any two hosts The second argument is the type of socket. 
-SOCK_STREAM means that data or characters are read in 
-a continuous flow.
+The first argument AF_INET is the address domain of the socket. 
+This is used when we have an Internet Domain with any two hosts 
+The second argument is the type of socket. SOCK_STREAM means 
+that data or characters are read in a continuous flow.
 '''
 server = socket.socket(socket.AF_INET, socket.SOCK_STREAM) 
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) 
@@ -30,15 +29,14 @@ HOST = socket.gethostname()
 PORT = int(sys.argv[1]) 
   
 '''
-binds the server to an entered IP address and at the 
-specified port number. 
-The client must be aware of these parameters 
+Binds the server to an entered IP address and at the specified 
+port number. The client must be aware of these parameters 
 '''
 server.bind((HOST, PORT)) 
   
 '''
-listens for 100 active connections. This number can be 
-increased as per convenience. 
+Listens for 100 active connections. This number can be increased 
+as per convenience. 
 '''
 print("Listening on", HOST, PORT)
 server.listen(100) 
@@ -48,8 +46,9 @@ list_of_clients = []
 def clientthread(conn, addr): 
   
     # sends a message to the client whose user object is conn 
-    conn.send(bytes('Welcome to ' + HOST + '\'s chatroom!', 'utf8'))
-    # conn.send(bytes('Welcome to ' + HOST + '\'s chatroom!\n', 'utf8'))
+    conn.send(bytes('Welcome to ' + HOST + '\'s chatroom!\n', 'utf8'))
+    conn.send(bytes('2\n', 'utf8'))
+    conn.send(bytes('3\n', 'utf8'))
 
   
     while True: 
@@ -71,12 +70,12 @@ def clientthread(conn, addr):
                 with a '/' indicating a command
                 '''
                 if (message[:1] == '/'):
-                    inputCommand(conn, message[1:])
+                    inputCommand(message[1:], conn)
                     
                 else:
                     # Calls broadcast function to send message to all 
-                    message_to_send = "<" + addr[0] + "> " + message
-                    broadcast(message_to_send, conn) 
+                    br_message = "<" + addr[0] + "> " + message
+                    broadcast(br_message, conn) 
 
             else: 
                 '''
@@ -89,13 +88,12 @@ def clientthread(conn, addr):
             continue
   
 '''
-Using the below function, we broadcast the message to all 
-clients who's object is not the same as the one sending 
-the message
+Using the below function, we broadcast the message to all clients 
+who's object is not the same as the one sending the message
 '''
-def broadcast(message, connection): 
+def broadcast(message, conn): 
     for client in list_of_clients: 
-        if client!=connection: 
+        if client!=conn: 
             try: 
                 client.send(bytes(message, 'utf8'))
             except: 
@@ -104,22 +102,32 @@ def broadcast(message, connection):
                 remove(client) 
   
 '''
-The following function simply removes the object 
-from the list that was created at the beginning of  
-the program
+The following function simply removes the object from the list that 
+was created at the beginning of the program
 '''
-def remove(connection): 
-    if connection in list_of_clients: 
-        # print("Removing client: " + connection)
-        list_of_clients.remove(connection) 
+def remove(conn): 
+    if conn in list_of_clients: 
+        list_of_clients.remove(conn) 
 
-def inputCommand(conn, message):
-    # conn.send(bytes(("YOU SAID " + message), 'utf8'))
+'''
+The following function is opposite to the broadcast func in that 
+it will only be called in the event that a given message is to 
+be sent to only one client -- such as when a '/' command is called
+'''
+def inputCommand(message, conn):
+    time.sleep(0.5)
+    serverReply = "Command not recognized"
     if message in commands:
         print("SHOULD SEND " + commands[message])
-        conn.send(bytes(commands[message]), 'utf8') 
-    else:
-        conn.send(bytes("Command not recognized"), 'utf8')
+        serverReply = commands[message]
+
+    try: 
+        conn.send(bytes(serverReply), 'utf8') 
+    except: 
+        print("EXCEPT -- WILL REMOVE CONN")
+        # conn.close() 
+        # remove(conn) 
+
   
 while 1: 
     '''
