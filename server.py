@@ -69,7 +69,9 @@ def clientthread(conn, addr):
                 do not broadcast if user message prepended 
                 with a '/' indicating a command
                 '''
+
                 if (message[:1] == '/'):
+                    print(message)
                     inputCommand(message[1:], conn)
                     
                 else:
@@ -115,7 +117,6 @@ it will only be called in the event that a given message is to
 be sent to only one client -- such as when a '/' command is called
 '''
 def inputCommand(message, conn):
-    time.sleep(0.5)
     serverReply = "Command not recognized"
     if message in commands:
         print("SHOULD SEND " + commands[message])

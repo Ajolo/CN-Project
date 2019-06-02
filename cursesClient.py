@@ -110,8 +110,8 @@ def draw_menu(stdscr):
                 if socks == server: 
                     message = socks.recv(1024).decode('utf-8')
                     # once message recv'd, need to separate out consecutive messages by newline
-                    message.splitlines()
-                    for line in message:
+                    splitMessage = message.splitlines()
+                    for line in splitMessage:
                         text_to_render.insert(0, line)
                 else: 
                     message = (inputWindow.getstr(0, 2)).decode()
