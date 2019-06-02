@@ -70,14 +70,12 @@ def clientthread(conn, addr):
 
                 if (message[:1] == '/'):
                     print(message)
-                    # inputCommand(message[1:], conn)
-                    for address in list_of_clients:
-                        broadcast(message[1:], address)
+                    broadcast(message[1:], conn, True)
                     
                 else:
                     # Calls broadcast function to send message to all 
                     br_message = "<" + addr[0] + "> " + message + "\n"
-                    broadcast(br_message, conn) 
+                    broadcast(br_message, conn, False) 
 
             else: 
                 '''
@@ -93,19 +91,36 @@ def clientthread(conn, addr):
 Using the below function, we broadcast the message to all clients 
 who's object is not the same as the one sending the message
 '''
-def broadcast(message, conn): 
-    for client in list_of_clients: 
-        if client!=conn: 
-            try: 
-                client.send(bytes(message, 'utf8'))
-            except: 
-                # broadcast that this client has disconnected
-                # discMessage = "X has disconnected"
-                # broadcast(discMessage, client)
+def broadcast(message, conn, isCommand): 
+    # if recv'd a regular message -- broadcast
+    if isCommand == False:
+        for client in list_of_clients: 
+            if client!=conn: 
+                try: 
+                    client.send(bytes(message, 'utf8'))
+                except: 
+                    # broadcast that this client has disconnected
+                    # discMessage = "X has disconnected"
+                    # broadcast(discMessage, client)
 
-                # close and remove client
-                client.close() 
-                remove(client) 
+                    # close and remove client
+                    client.close() 
+                    remove(client)
+
+    # recv'd a command prepended with '/' -- only reply to sender
+    else:
+        for client in list_of_clients:
+            if client == conn
+                try:
+                    client.send(bytes(message, 'utf8'))
+                except: 
+                    # broadcast that this client has disconnected
+                    # discMessage = "X has disconnected"
+                    # broadcast(discMessage, client)
+
+                    # close and remove client
+                    client.close() 
+                    remove(client)
 
 
 '''
@@ -121,7 +136,7 @@ def remove(conn):
 The following function is opposite to the broadcast func in that 
 it will only be called in the event that a given message is to 
 be sent to only one client -- such as when a '/' command is called
-'''
+
 def inputCommand(message, conn):
     serverReply = "Command not recognized"
     if message in commands:
@@ -134,6 +149,7 @@ def inputCommand(message, conn):
         print("EXCEPT -- WILL REMOVE CONN")
         # conn.close() 
         # remove(conn) 
+'''
 
   
 while 1: 
