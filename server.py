@@ -110,7 +110,7 @@ def broadcast(message, conn, isCommand):
     # recv'd a command prepended with '/' -- only reply to sender
     else:
         for client in list_of_clients:
-            if client == conn
+            if client == conn:
                 try:
                     client.send(bytes(message, 'utf8'))
                 except: 
