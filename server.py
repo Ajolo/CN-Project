@@ -111,12 +111,19 @@ def broadcast(message, conn, isCommand):
     else:
         for client in list_of_clients:
             if client == conn:
+                serverReply = "Command not recognized"
+                if message in commands:
+                    print("SHOULD SEND " + commands[message])
+                    serverReply = commands[message] + "\n"
+
                 try:
                     client.send(bytes(message, 'utf8'))
                 except: 
                     # broadcast that this client has disconnected
                     # discMessage = "X has disconnected"
                     # broadcast(discMessage, client)
+                    print("EXCEPT -- WILL REMOVE CONN")
+
 
                     # close and remove client
                     client.close() 
@@ -130,26 +137,6 @@ was created at the beginning of the program
 def remove(conn): 
     if conn in list_of_clients: 
         list_of_clients.remove(conn) 
-
-
-'''
-The following function is opposite to the broadcast func in that 
-it will only be called in the event that a given message is to 
-be sent to only one client -- such as when a '/' command is called
-
-def inputCommand(message, conn):
-    serverReply = "Command not recognized"
-    if message in commands:
-        print("SHOULD SEND " + commands[message])
-        serverReply = commands[message] + "\n"
-
-    try: 
-        conn.send(bytes(serverReply), 'utf8') 
-    except: 
-        print("EXCEPT -- WILL REMOVE CONN")
-        # conn.close() 
-        # remove(conn) 
-'''
 
   
 while 1: 
