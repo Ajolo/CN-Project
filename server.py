@@ -2,7 +2,7 @@
 import socket, select, sys, _thread
 
 commands = {'help': 'Commands are /help, /take, /ping',
-            'ping': 'pong!'
+            'ping': 'pong!',
             'take': 'secured the bag . . . '
 }
 
