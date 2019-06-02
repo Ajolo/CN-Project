@@ -172,7 +172,7 @@ while 1:
     connMessage = addr[0] + " connected" + "\n"
     
     for address in list_of_clients:
-        broadcast(connMessage, address)
+        broadcast(connMessage, address, False)
     
     # creates and individual thread for every user  
     # that connects 
