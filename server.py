@@ -61,7 +61,7 @@ def clientthread(conn, addr):
                 user who just sent the message on the server 
                 terminal
                 '''
-                print("<" + addr[0] + "> " + message + "\n")
+                print("<" + addr[0] + "> " + message)
 
                 '''
                 do not broadcast if user message prepended 
@@ -97,8 +97,12 @@ def broadcast(message, conn):
             try: 
                 client.send(bytes(message, 'utf8'))
             except: 
+                # broadcast that this client has disconnected
+                discMessage = "X has disconnected"
+                broadcast(discMessage, client)
+
+                # close and remove client
                 client.close() 
-                # if the link is broken, we remove the client 
                 remove(client) 
   
 '''
@@ -145,7 +149,7 @@ while 1:
   
     # prints and broadcasts the address of the user that just connected 
     print(addr[0] + " connected")
-    connMessage = addr[0] + " connected"
+    connMessage = addr[0] + " connected" + "\n"
     
     for address in list_of_clients:
         broadcast(connMessage, address)
