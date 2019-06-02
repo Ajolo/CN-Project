@@ -2,7 +2,8 @@
 import socket, select, sys, _thread
 
 commands = {'help': 'Commands are /help, /take, /ping',
-            'Age': 7
+            'ping': 'pong!'
+            'take': 'secured the bag . . . '
 }
 
   
@@ -63,15 +64,11 @@ def clientthread(conn, addr):
                 '''
                 print("<" + addr[0] + "> " + message)
 
-                '''
-                do not broadcast if user message prepended 
-                with a '/' indicating a command
-                '''
-
+                # do not broadcast if user indicates a '/'                
                 if (message[:1] == '/'):
-                    print(message)
                     broadcast(message[1:], conn, True)
-                    
+
+                # broadcast chat messages to all users
                 else:
                     # Calls broadcast function to send message to all 
                     br_message = "<" + addr[0] + "> " + message + "\n"
@@ -111,7 +108,7 @@ def broadcast(message, conn, isCommand):
     else:
         for client in list_of_clients:
             if client == conn:
-                serverReply = "Command not recognized"
+                serverReply = "Command not recognized\n"
                 if message in commands:
                     print("SHOULD SEND " + commands[message])
                     serverReply = commands[message] + "\n"
@@ -123,7 +120,6 @@ def broadcast(message, conn, isCommand):
                     # discMessage = "X has disconnected"
                     # broadcast(discMessage, client)
                     print("EXCEPT -- WILL REMOVE CONN")
-
 
                     # close and remove client
                     client.close() 
