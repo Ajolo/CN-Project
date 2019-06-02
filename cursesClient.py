@@ -100,43 +100,48 @@ def draw_menu(stdscr):
         inputWindow.addstr(0, 0, "> ")
         inputWindow.refresh()
 
-        while 1: 
- 
-            # maintains a list of possible input streams 
-            sockets_list = [sys.stdin, server] 
-            read_sockets, write_socket, error_socket = select.select(sockets_list,[],[]) 
-  
-            for socks in read_sockets: 
-                if socks == server: 
-                    message = socks.recv(1024).decode('utf-8')
-                    # once message recv'd, need to separate out consecutive messages by newline
-                    splitMessage = message.splitlines()
-                    for line in splitMessage:
-                        text_to_render.insert(0, line)
-                else: 
-                    message = (inputWindow.getstr(0, 2)).decode()
-                    server.send(bytes(message, 'utf8'))
-                    prependMessage = ("<You> " + message)
-                    text_to_render.insert(0, prependMessage)
-
-            # if length of text_to_render is larger than render area, then 
-            while len(text_to_render) > textHeight:
-                text_to_render.pop()
+        try:
+            while 1: 
     
-            # render all previously saved text
-            for i in range(0, len(text_to_render)):
-                try:
-                    textWindow.clrtoeol() # do this to clear any previous input 
-                    textWindow.addstr((textHeight-2) - i, 0, text_to_render[i])
-                except:
-                    break
+                # maintains a list of possible input streams 
+                sockets_list = [sys.stdin, server] 
+                read_sockets, write_socket, error_socket = select.select(sockets_list,[],[]) 
+    
+                for socks in read_sockets: 
+                    if socks == server: 
+                        message = socks.recv(1024).decode('utf-8')
+                        # once message recv'd, need to separate out consecutive messages by newline
+                        splitMessage = message.splitlines()
+                        for line in splitMessage:
+                            text_to_render.insert(0, line)
+                    else: 
+                        message = (inputWindow.getstr(0, 2)).decode()
+                        server.send(bytes(message, 'utf8'))
+                        prependMessage = ("<You> " + message)
+                        text_to_render.insert(0, prependMessage)
+
+                # if length of text_to_render is larger than render area, then 
+                while len(text_to_render) > textHeight:
+                    text_to_render.pop()
+        
+                # render all previously saved text
+                for i in range(0, len(text_to_render)):
+                    try:
+                        textWindow.clrtoeol() # do this to clear any previous input 
+                        textWindow.addstr((textHeight-2) - i, 0, text_to_render[i])
+                    except:
+                        break
+                
+                # Refresh the screen
+                textWindow.refresh()
+                stdscr.refresh()
+                inputWindow.erase()
+                inputWindow.addstr(0, 0, "> ")
+                inputWindow.refresh()
             
-            # Refresh the screen
-            textWindow.refresh()
-            stdscr.refresh()
-            inputWindow.erase()
-            inputWindow.addstr(0, 0, "> ")
-            inputWindow.refresh()
+        # handle broken connection 
+        except:
+            break
 
     # handle ctrl+c
     except KeyboardInterrupt:

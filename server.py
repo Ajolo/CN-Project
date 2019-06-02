@@ -98,12 +98,13 @@ def broadcast(message, conn):
                 client.send(bytes(message, 'utf8'))
             except: 
                 # broadcast that this client has disconnected
-                discMessage = "X has disconnected"
-                broadcast(discMessage, client)
+                # discMessage = "X has disconnected"
+                # broadcast(discMessage, client)
 
                 # close and remove client
                 client.close() 
                 remove(client) 
+ 
   
 '''
 The following function simply removes the object from the list that 
@@ -112,6 +113,7 @@ was created at the beginning of the program
 def remove(conn): 
     if conn in list_of_clients: 
         list_of_clients.remove(conn) 
+
 
 '''
 The following function is opposite to the broadcast func in that 
