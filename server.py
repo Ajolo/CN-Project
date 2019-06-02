@@ -117,7 +117,7 @@ def broadcast(message, conn, isCommand):
                     serverReply = commands[message] + "\n"
 
                 try:
-                    client.send(bytes(message, 'utf8'))
+                    client.send(bytes(serverReply, 'utf8'))
                 except: 
                     # broadcast that this client has disconnected
                     # discMessage = "X has disconnected"
