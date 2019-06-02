@@ -110,17 +110,11 @@ def broadcast(message, conn, isCommand):
             if client == conn:
                 serverReply = "Command not recognized\n"
                 if message in commands:
-                    print("SHOULD SEND " + commands[message])
                     serverReply = commands[message] + "\n"
 
                 try:
                     client.send(bytes(serverReply, 'utf8'))
                 except: 
-                    # broadcast that this client has disconnected
-                    # discMessage = "X has disconnected"
-                    # broadcast(discMessage, client)
-                    print("EXCEPT -- WILL REMOVE CONN")
-
                     # close and remove client
                     client.close() 
                     remove(client)
