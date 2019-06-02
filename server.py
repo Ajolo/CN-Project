@@ -47,8 +47,6 @@ def clientthread(conn, addr):
   
     # sends a message to the client whose user object is conn 
     conn.send(bytes('Welcome to ' + HOST + '\'s chatroom!\n', 'utf8'))
-    conn.send(bytes('2\n', 'utf8'))
-    conn.send(bytes('3\n', 'utf8'))
 
   
     while True: 
@@ -63,7 +61,7 @@ def clientthread(conn, addr):
                 user who just sent the message on the server 
                 terminal
                 '''
-                print("<" + addr[0] + "> " + message)
+                print("<" + addr[0] + "> " + message + "\n")
 
                 '''
                 do not broadcast if user message prepended 
@@ -76,7 +74,7 @@ def clientthread(conn, addr):
                     
                 else:
                     # Calls broadcast function to send message to all 
-                    br_message = "<" + addr[0] + "> " + message
+                    br_message = "<" + addr[0] + "> " + message + "\n"
                     broadcast(br_message, conn) 
 
             else: 
@@ -120,7 +118,7 @@ def inputCommand(message, conn):
     serverReply = "Command not recognized"
     if message in commands:
         print("SHOULD SEND " + commands[message])
-        serverReply = commands[message]
+        serverReply = commands[message] + "\n"
 
     try: 
         conn.send(bytes(serverReply), 'utf8') 
