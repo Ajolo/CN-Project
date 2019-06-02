@@ -107,9 +107,9 @@ def draw_menu(stdscr):
                 sockets_list = [sys.stdin, server] 
                 read_sockets, write_socket, error_socket = select.select(sockets_list,[],[]) 
     
-                for socks in read_sockets: 
-                    if socks == server: 
-                        message = socks.recv(1024).decode('utf-8')
+                for sockets in read_sockets: 
+                    if sockets == server: 
+                        message = sockets.recv(1024).decode('utf-8')
                         # once message recv'd, need to separate out consecutive messages by newline
                         splitMessage = message.splitlines()
                         for line in splitMessage:
@@ -141,7 +141,7 @@ def draw_menu(stdscr):
             
         # handle broken connection 
         except:
-            break
+            pass
 
     # handle ctrl+c
     except KeyboardInterrupt:

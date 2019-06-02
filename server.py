@@ -39,7 +39,7 @@ Listens for 100 active connections. This number can be increased
 as per convenience. 
 '''
 print("Listening on", HOST, PORT)
-server.listen(100) 
+server.listen(1) 
   
 list_of_clients = [] 
   
@@ -70,7 +70,9 @@ def clientthread(conn, addr):
 
                 if (message[:1] == '/'):
                     print(message)
-                    inputCommand(message[1:], conn)
+                    # inputCommand(message[1:], conn)
+                    for address in list_of_clients:
+                        broadcast(message[1:], address)
                     
                 else:
                     # Calls broadcast function to send message to all 
@@ -104,8 +106,8 @@ def broadcast(message, conn):
                 # close and remove client
                 client.close() 
                 remove(client) 
- 
-  
+
+
 '''
 The following function simply removes the object from the list that 
 was created at the beginning of the program
@@ -160,6 +162,7 @@ while 1:
     # that connects 
     _thread.start_new_thread(clientthread, (conn,addr))  
     # clientthread(conn, addr)   
-  
+
+
 conn.close()
 server.close()
