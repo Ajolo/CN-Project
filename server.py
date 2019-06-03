@@ -1,9 +1,10 @@
 # Python program to implement server side of chat room. 
 import socket, select, sys, _thread
 
-commands = {'help': 'Commands are /help, /take, /ping',
+
+commands = {'help': 'Commands: /help, /take, /ping, /clear',
             'ping': 'pong!',
-            'take': 'secured the bag . . . '
+            'take': 'secured the bag . . . ', 
 }
 
   
@@ -23,8 +24,7 @@ if len(sys.argv) != 2:
     exit() 
   
 # takes the first argument from command prompt as IP address 
-HOST = socket.gethostname()
-
+HOST = 'localhost' # socket.getfqdn()
   
 # takes second argument from command prompt as port number 
 PORT = int(sys.argv[1]) 
@@ -48,7 +48,7 @@ def clientthread(conn, addr):
   
     # sends a message to the client whose user object is conn 
     conn.send(bytes('Welcome to ' + HOST + '\'s chatroom!\n', 'utf8'))
-
+    conn.send(bytes('Try using \'/help\' to get started\n', 'utf8'))
   
     while True: 
         try: 
