@@ -1,4 +1,4 @@
-import sys, os, socket, select, curses,
+import sys, os, socket, select, curses
 
 '''
 Server connection logic
@@ -85,7 +85,7 @@ def draw_menu(stdscr):
         stdscr.addstr(center_y-1, (width // 2) + 4, "/     \\")         # -3
         stdscr.addstr(center_y, (width // 2) + 2, "/         \\")       # -5
         stdscr.addstr(center_y+1, (width // 2), "/     $$$     \\")     # -7
-        stdscr.addstr(center_y+2, (width // 2) - 1, "|      " + timeLeft +  "      |")# -8
+        stdscr.addstr(center_y+2, (width // 2) - 1, "|      " + "xxx" +  "      |")# -8
         stdscr.addstr(center_y+3, (width // 2), "\\     $$$     /")     # -7 
         stdscr.addstr(center_y+4, (width // 2) + 2, "\\         /")     # -5
         stdscr.addstr(center_y+5, (width // 2) + 3, '-' * 8)            # -4
