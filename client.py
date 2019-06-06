@@ -11,11 +11,14 @@ IP_ADDR = str(sys.argv[1]) # for when specifying leia.cs.spu.edu
 PORT = int(sys.argv[2]) 
 server.connect((IP_ADDR, PORT)) 
 
-
 '''
 Curses menu rendering
 '''
 def draw_menu(stdscr):
+
+    # init myPot val
+    myPot = 0
+
 
     # Clear and refresh the screen for a blank canvas
     stdscr.clear()
@@ -85,7 +88,7 @@ def draw_menu(stdscr):
         stdscr.addstr(center_y-1, (width // 2) + 4, "/     \\")         # -3
         stdscr.addstr(center_y, (width // 2) + 2, "/         \\")       # -5
         stdscr.addstr(center_y+1, (width // 2), "/     $$$     \\")     # -7
-        stdscr.addstr(center_y+2, (width // 2) - 1, "|      " + "xxx" +  "      |")# -8
+        stdscr.addstr(center_y+2, (width // 2) - 1, "|      " + str('%0*d' % (3, myPot)) +  "      |")# -8
         stdscr.addstr(center_y+3, (width // 2), "\\     $$$     /")     # -7 
         stdscr.addstr(center_y+4, (width // 2) + 2, "\\         /")     # -5
         stdscr.addstr(center_y+5, (width // 2) + 3, '-' * 8)            # -4
@@ -114,11 +117,16 @@ def draw_menu(stdscr):
                     if sockets == server: 
                         message = sockets.recv(1024).decode('utf-8')
                         # once message recv'd, need to separate out consecutive messages by newline
-                        splitMessage = message.splitlines()
+                        splitMessage = message.splitlines()                        
 
                         # add to chat queue
                         for line in splitMessage:
                             text_to_render.insert(0, line)
+
+                            # check if incoming message is a command to be handled
+                            if line.startswith('Secured'):
+                                myPot += 50
+                                stdscr.addstr(center_y+2, (width // 2) - 1, "|      " + str('%0*d' % (3, myPot)) +  "      |")# -8
                         
                     else: 
                         message = (inputWindow.getstr(0, 2)).decode()

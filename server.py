@@ -1,12 +1,12 @@
 # Python program to implement server side of chat room. 
-import socket, select, sys, _thread
+import socket, select, sys, _thread, time
 
-
-commands = {'help': 'Commands: /help, /take, /ping, /clear',
+commands = {'help': 'Commands: /help, /start, /take, /clear',
             'ping': 'pong!',
-            'take': 'secured the bag . . . ', 
+            'take': 'Secured the bag . . . ', 
+            'start': 'Started',
+            'yeet': 'YEET'
 }
-
   
 '''
 The first argument AF_INET is the address domain of the socket. 
@@ -50,7 +50,8 @@ def clientthread(conn, addr):
     conn.send(bytes('Welcome to ' + HOST + '\'s chatroom!\n', 'utf8'))
     conn.send(bytes('Try using \'/help\' to get started\n', 'utf8'))
   
-    while True: 
+    while True:
+
         try: 
             message = conn.recv(1024).decode('utf-8')
             if message: 
@@ -58,26 +59,25 @@ def clientthread(conn, addr):
                 message.rstrip()
 
                 '''
-                prints the message and address of the 
-                user who just sent the message on the server 
-                terminal
+                prints the message and address of the user who just 
+                sent the message on the server terminal
                 '''
                 print("<" + addr[0] + "> " + message)
 
-                # do not broadcast if user indicates a '/'                
+                # do not broadcast if user indicates a '/' (use broadcast(..., True))            
                 if (message[:1] == '/'):
                     broadcast(message[1:], conn, True)
 
                 # broadcast chat messages to all users
                 else:
-                    # Calls broadcast function to send message to all 
+                    # Calls broadcast function to send message to all but sender
                     br_message = "<" + addr[0] + "> " + message + "\n"
                     broadcast(br_message, conn, False) 
 
             else: 
                 '''
-                message may have no content if the connection 
-                is broken, in this case we remove the connection
+                message may have no content if the connection is broken, 
+                in this case we remove the connection
                 '''
                 remove(conn) 
   
@@ -96,10 +96,6 @@ def broadcast(message, conn, isCommand):
                 try: 
                     client.send(bytes(message, 'utf8'))
                 except: 
-                    # broadcast that this client has disconnected
-                    # discMessage = "X has disconnected"
-                    # broadcast(discMessage, client)
-
                     # close and remove client
                     client.close() 
                     remove(client)
