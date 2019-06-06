@@ -7,6 +7,9 @@ commands = {'help': 'Commands: /help, /start, /take, /clear',
             'start': 'Started',
             'yeet': 'YEET'
 }
+
+start = time.time()
+running = False
   
 '''
 The first argument AF_INET is the address domain of the socket. 
@@ -64,9 +67,18 @@ def clientthread(conn, addr):
                 '''
                 print("<" + addr[0] + "> " + message)
 
+
                 # do not broadcast if user indicates a '/' (use broadcast(..., True))            
                 if (message[:1] == '/'):
-                    broadcast(message[1:], conn, True)
+                    if (message[1:] == "start"): # and running == False):
+                        print("TRYNA START")
+                        running = True
+                        # start a timer thread on new connect 
+                        _thread.start_new_thread(_timer, (60,))
+                    else:
+                        broadcast(message[1:], conn, True)
+
+                
 
                 # broadcast chat messages to all users
                 else:
@@ -124,8 +136,19 @@ def remove(conn):
     if conn in list_of_clients: 
         list_of_clients.remove(conn) 
 
-  
+
+def _timer(limit):
+    start = time.time()
+    end = time.time()
+    curr = end - start
+    while curr < limit:
+        end = time.time()
+    print("~~~ END OF TIMER ~~~")
+    running = False
+
+
 while 1: 
+
     '''
     Accepts a connection request and stores two parameters,  
     conn which is a socket object for that user, and addr  
@@ -147,10 +170,8 @@ while 1:
     for address in list_of_clients:
         broadcast(connMessage, address, False)
     
-    # creates and individual thread for every user  
-    # that connects 
-    _thread.start_new_thread(clientthread, (conn,addr))  
-    # clientthread(conn, addr)   
+    # creates and individual thread for every user that connects  
+    _thread.start_new_thread(clientthread, (conn,addr))
 
 
 conn.close()

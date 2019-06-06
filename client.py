@@ -124,7 +124,7 @@ def draw_menu(stdscr):
                             text_to_render.insert(0, line)
 
                             # check if incoming message is a command to be handled
-                            if line.startswith('Secured'):
+                            if line.startswith('/give'):
                                 myPot += 50
                                 stdscr.addstr(center_y+2, (width // 2) - 1, "|      " + str('%0*d' % (3, myPot)) +  "      |")# -8
                         
