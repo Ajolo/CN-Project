@@ -3,7 +3,7 @@ import socket, select, sys, _thread, time
 
 commands = {'help': 'Commands: /help, /start, /take, /clear',
             'ping': 'pong!',
-            'take': 'Secured the bag . . . ', 
+            'take': 'Attempted a take', 
             'start': 'Started',
             'yeet': 'YEET'
 }
